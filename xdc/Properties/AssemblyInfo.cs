@@ -1,6 +1,6 @@
 ﻿/*
  * Copyright (C), 2007, Mathieu Kooiman < xdc@scriptorama.nl> 
- * $LastRevision$
+ * $Id$
  * 
  * This file is part of XDebugClient.
  *
