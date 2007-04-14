@@ -134,6 +134,8 @@ namespace xdc
             }
 
             this.ToggleMenuItems(false);
+
+            _statusFrm.WriteStatusLine("(!) Debugging session terminated.");
         }
 
         private void WriteDebugLine(string line)
@@ -206,7 +208,7 @@ namespace xdc
 
                     if (r != DialogResult.Yes)
                     {
-                        MessageBox.Show("Nothing I can do then. Ciao!");
+                        MessageBox.Show("Cannot debug without a source file.\r\n\r\nDebugging session terminated.\r\n", "Debugging session terminated");
                         this.StopDebuggingSession();
                         return false;
                     }
@@ -225,8 +227,8 @@ namespace xdc
                         }
                     }
                     else if (file == DialogResult.Cancel)
-                    {                        
-                        MessageBox.Show("Nothing I can do then. CIAO!");
+                    {
+                        MessageBox.Show("Cannot debug without a source file.\r\n\r\nDebugging session terminated.\r\n", "Debugging session terminated");
                         this.StopDebuggingSession();
                         return false;
                     }
