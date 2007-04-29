@@ -81,6 +81,12 @@
     <Compile Include="Forms\CallstackForm.Designer.cs">
       <DependentUpon>CallstackForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FileHandlingForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FileHandlingForm.Designer.cs">
+      <DependentUpon>FileHandlingForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\PropertyForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -88,6 +94,10 @@
       <DependentUpon>PropertyForm.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\DebugNode.cs" />
+    <Compile Include="GUI\FileLoader\FileLoaderFactory.cs" />
+    <Compile Include="GUI\FileLoader\IFileLoader.cs" />
+    <Compile Include="GUI\FileLoader\RewriteFileLoader.cs" />
+    <Compile Include="GUI\FileLoader\SourceFileLoader.cs" />
     <Compile Include="XDebug\ActiveMark.cs" />
     <Compile Include="XDebug\BreakpointManager.cs" />
     <Compile Include="Forms\SourceFileForm.cs">
@@ -117,6 +127,10 @@
     <EmbeddedResource Include="Forms\CallstackForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>CallstackForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FileHandlingForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FileHandlingForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\PropertyForm.resx">
       <SubType>Designer</SubType>

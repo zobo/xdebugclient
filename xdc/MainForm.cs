@@ -35,6 +35,7 @@ using ICSharpCode.TextEditor.Document;
 
 using xdc.XDebug;
 using xdc.GUI;
+using xdc.GUI.FileLoader;
 
 namespace xdc
 {
@@ -46,7 +47,8 @@ namespace xdc
         private xdc.XDebug.Client _client;
         
         private BreakpointManager _breakpointMgr;
-        
+        private xdc.GUI.FileLoader.FileLoader _fileLoader;
+
         private FileManager _fileMgr;
         private Location _CurrentLocation;        
 
@@ -66,12 +68,12 @@ namespace xdc
             // Helper objects
             _breakpointMgr = new BreakpointManager();
             _fileMgr = new FileManager();
-            
+           
+
             _CurrentLocation = new Location();
             _CurrentLocation.line = -1;
 
-            this.KeyPreview = true;
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(MainForm_KeyUp);
+            this.KeyPreview = true;            
 
             this.ToggleMenuItems(false);            
         }
@@ -95,14 +97,18 @@ namespace xdc
         {
             if (started)
             {
+                if (_fileLoader != null && _fileLoader.AllowsOpenFileDialog)
+                {
+                    openToolStripMenuItem.Enabled = true;
+                }
+
                 runToolStripMenuItem.Enabled = true;
                 stepInToolStripMenuItem.Enabled = true;
                 stepOutToolStripMenuItem.Enabled = true;
                 stepOverToolStripMenuItem.Enabled = true;
 
                 startListeningToolStripMenuItem.Enabled = false;
-                stopDebuggingToolStripMenuItem.Enabled = true;
-                openToolStripMenuItem.Enabled = true;
+                stopDebuggingToolStripMenuItem.Enabled = true;                
             }
             else
             {
@@ -168,16 +174,28 @@ namespace xdc
 
             currentFile.SetActiveMark(_CurrentLocation.line);
             currentFile.Focus();
-            currentFile.BringToFront();
-
-            
-            
-            WriteDebugLine("[DEBUG] Setting active line to " + location.filename + ": " + location.line);
-
+            currentFile.BringToFront();                                  
         }
                   
         private bool LoadFile(string filename)
         {
+            /**
+             * Loading a file:
+             *  1. Local file which can be used 1-on-1
+             *  2. "Local" file which needs rewriting (FTP Location Service)
+             *  3. Remote file, not accessible via Samba.
+             *  4. Remote file, accessible via Samba.
+             * 
+             * Situations 1, 2 and 4 can be resolved using a simple filename rewriter. In case (1)
+             * no rewriting has to be done, in case (2) complete rewriting has be done and in case (3)
+             * partial rewriting has to be done.
+             * 
+             * Situation 3 can be resolved by using the Source DBGP command, but that leaves us in the dark
+             * as to what other files are available which makes debugging rather annoying when dealing
+             * with large systems. It can also take a very long time with loading large files, at least 
+             * with the current implementation.
+             */             
+            
             string baseFile = System.IO.Path.GetFileName(filename);
             
             string remoteFilename = filename;
@@ -189,75 +207,53 @@ namespace xdc
             {
                 sff.Focus();
                 return true;
-            }            
+            }
 
-            if (!System.IO.File.Exists(filename) && !System.IO.File.Exists(_fileMgr.getLocalFilename(filename)))
+            xdc.Forms.SourceFileForm f = new xdc.Forms.SourceFileForm(_client, filename);
+
+            f.FormClosed += new FormClosedEventHandler(SourceFileForm_FileClosed);
+            f.Text = baseFile;
+            f.TabText = localFilename;                    
+
+            /* When we can't find the file specified, offer a way to rewrite the path */
+            if (!System.IO.File.Exists(filename))
             {
 
-
-                string sourceFilename = System.IO.Path.GetFileName(filename);
-                bool done = false;
-
-                while (!done)
+                if (_fileLoader == null)
                 {
-                    DialogResult r = MessageBox.Show(
-                        "We couldn't open the file:\r\n\r\n" + filename + "\r\n\r\nPerhaps it's on a different server. Do you want to search for it?",
-                        "Local file not found.",
-                        MessageBoxButtons.YesNo
-                    );
+                    xdc.Forms.FileHandlingForm filehandlingForm = new xdc.Forms.FileHandlingForm(filename);
+                    DialogResult handlerResult = filehandlingForm.ShowDialog();
 
-                    if (r != DialogResult.Yes)
+                    if (handlerResult != DialogResult.OK)
                     {
-                        MessageBox.Show("Cannot debug without a source file.\r\n\r\nDebugging session terminated.\r\n", "Debugging session terminated");
-                        this.StopDebuggingSession();
                         return false;
                     }
 
-                    OpenFileDialog fileDialog = new OpenFileDialog();
-                    fileDialog.Filter = "PHP file|" + sourceFilename;
+                    _fileLoader = FileLoaderFactory.Create(filehandlingForm.SelectedFileLoader);
+                    _fileLoader.setClient(_client);
 
-                    DialogResult file = fileDialog.ShowDialog();
+                }
 
-                    if (file == DialogResult.OK)
+                bool fileLoaded = false;
+
+                if (_fileLoader.DetermineLocalFilename(filename, ref localFilename))
+                {
+                    if (_fileLoader.OpenFile(f, localFilename))
                     {
-                        if (_fileMgr.DetermineRewritePath(fileDialog.FileName, filename))
-                        {
-                            done = true;
-                            break;
-                        }
-                    }
-                    else if (file == DialogResult.Cancel)
-                    {
-                        MessageBox.Show("Cannot debug without a source file.\r\n\r\nDebugging session terminated.\r\n", "Debugging session terminated");
-                        this.StopDebuggingSession();
-                        return false;
+                        fileLoaded = true;
                     }
                 }
 
-                localFilename = _fileMgr.getLocalFilename(remoteFilename);
-
+                if (!fileLoaded)
+                {
+                    this.StopDebuggingSession();
+                    return false;
+                }
             }
-            else
-            {
-                /* User could've opened a file before hand. Figure out if we can turn it into a
-                 * remote path. */
 
-                string tmpLocalFilename = _fileMgr.getLocalFilename(localFilename);
-                remoteFilename = localFilename;
-                localFilename = tmpLocalFilename;
-            }         
-           
-            xdc.Forms.SourceFileForm f = new xdc.Forms.SourceFileForm(localFilename, remoteFilename, _client);
-            
-            f.FormClosed += new FormClosedEventHandler(SourceFileForm_FileClosed);
-            f.Text    = baseFile;
-            f.TabText = localFilename;                    
-
+            _fileMgr.Add(filename, localFilename, f);
             f.Show(this.dockPanel, DockState.Document);
-            
-
-            _fileMgr.Add(remoteFilename, f);
-
+                       
             closeToolStripMenuItem.Enabled = true;
 
             // We have to collect all the bookmarks added and removed. This way
@@ -346,7 +342,7 @@ namespace xdc
             } 
             catch (Exception ex)
             {
-                _statusFrm.WriteStatusLine("(-) Cannot initialize XDebugClient: " + e.Message);
+                _statusFrm.WriteStatusLine("(-) Cannot initialize XDebugClient: " + ex.Message);
                 
                 MessageBox.Show(
                     "XDebugClient was unable to initialize. Debugging session terminated.\r\n\r\n" + ex.Message,
@@ -410,8 +406,10 @@ namespace xdc
         {
           
             this.ToggleMenuItems(true);
-                                 
-            return this.LoadFile(e.Filename);
+
+         
+
+           return this.LoadFile(e.Filename);
         }
 
         #endregion
@@ -450,6 +448,7 @@ namespace xdc
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
+
             DialogResult r = openFileDialog1.ShowDialog();
 
             if (r == DialogResult.OK)
@@ -466,7 +465,7 @@ namespace xdc
        
         private void runToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.SendContinuationCommand("run");
+            this.SendContinuationCommand("run");            
         }
       
         private void startListeningToolStripMenuItem_Click(object sender, EventArgs e)
@@ -524,40 +523,7 @@ namespace xdc
 
             this.Close();
         }
-
-        private void MainForm_KeyUp(object sender, KeyEventArgs e)
-        {
-            /* Only allow F5 if we're not on a breakpoint. Step over/step in in 
-             * the Initialized state is useless. */
-
-     /*       if (_client.State != XdebugClientState.Break && e.KeyCode != Keys.F5)
-            {
-                return;
-            }
-
-            switch (e.KeyCode)
-            {
-                case Keys.F5:
-                    this.SendContinuationCommand("run");
-                    e.Handled = true;
-                    break;
-
-                case Keys.F10:
-                    this.SendContinuationCommand("step_over");
-                    e.Handled = true;
-                    break;
-
-                case Keys.F11:
-                    this.SendContinuationCommand("step_into");
-                    e.Handled = true;
-                    break;
-
-                case Keys.F12:
-                    this.SendContinuationCommand("step_out");
-                    e.Handled = true;
-                    break;
-            } */
-        } 
+       
         #endregion
 
         #region General helpers
@@ -568,7 +534,7 @@ namespace xdc
                 /* Keep all the breakpoints of the files that are still open.
                  * This should probably be replaced by code in the SourceFileView_closing
                  * form triggering removal of all it's breakpoints.
-                 */
+                
                 foreach (Breakpoint p in _breakpointMgr.Breakpoints)
                 {
                     if (_fileMgr.getFormByRemoteFilename(p.filename) != null)
@@ -576,11 +542,14 @@ namespace xdc
                         if (!_breakpointMgr.AddedBreakpoints.Contains(p))
                             _breakpointMgr.AddedBreakpoints.Add(p);
                     }
+                 * 
+                 * THIS WILL BREAK, can't change collection halve way through.
+                 * 
                     else
                     {
                         _breakpointMgr.Breakpoints.Remove(p);
                     }
-                }
+                } */
             }
 
             foreach (Breakpoint b in _breakpointMgr.AddedBreakpoints)

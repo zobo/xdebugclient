@@ -39,16 +39,14 @@ namespace xdc.Forms
         static Color BreakpointColor = Color.FromArgb(255, 213, 211);
         static Color CurrentLineColor = Color.FromName("Yellow");
 
-        private string _localFilename;
-        private string _remoteFilename; 
+        private string _filename;
+        
         private xdc.XDebug.Client _xdebugClient;
         
-        public SourceFileForm(string localFileName, string remoteFilename, xdc.XDebug.Client xdebugClient)
-        {
-            this._localFilename = localFileName;
-            this._remoteFilename = remoteFilename;
-
+        public SourceFileForm(xdc.XDebug.Client xdebugClient, string filename)
+        {            
             this._xdebugClient = xdebugClient;
+            this._filename = filename;
 
             InitializeComponent();
 
@@ -57,17 +55,20 @@ namespace xdc.Forms
             this.textEditor.TextEditorProperties.ShowSpaces = false;
             this.textEditor.Document.ReadOnly = true;
             this.textEditor.TextEditorProperties.CreateBackupCopy = false;
-
-            this.textEditor.LoadFile(this._localFilename);
-
+            
             this.textEditor.ActiveTextAreaControl.TextArea.IconBarMargin.MouseDown += new ICSharpCode.TextEditor.MarginMouseEventHandler(OnIconBarMarginMouseDown);
             this.textEditor.Document.BookmarkManager.Removed += new ICSharpCode.TextEditor.Document.BookmarkEventHandler(OnBookmarkRemoved);
             this.textEditor.Document.BookmarkManager.Added += new ICSharpCode.TextEditor.Document.BookmarkEventHandler(OnBookmarkAdded);        
         }
 
+        public void LoadFile(string filename)
+        {           
+            this.textEditor.LoadFile(filename);
+        }
+
         public string getFilename()
         {
-            return this._localFilename;
+            return this._filename;
         }
        
         public void ToggleMenuItems(bool started)
@@ -127,7 +128,7 @@ namespace xdc.Forms
                 this.textEditor.Document.BookmarkManager.AddMark
                 (
                     new Breakpoint (
-                        _remoteFilename,
+                        this._filename,
                         this.textEditor.Document,
                         logicPos.Y
                     )
@@ -141,7 +142,7 @@ namespace xdc.Forms
 
         public void SetActiveMark(int Line)
         {      
-            ActiveMark mark = new ActiveMark(this._localFilename, this.textEditor.Document, Line);
+            ActiveMark mark = new ActiveMark(this._filename, this.textEditor.Document, Line);
 
             this.textEditor.Document.BookmarkManager.AddMark(mark);
 
@@ -225,6 +226,18 @@ namespace xdc.Forms
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
         {
             inspectToolStripMenuItem.Enabled = (_xdebugClient.State == XdebugClientState.Break);
+        }
+
+        public void LoadSourceAsFile(string sourceCode)
+        {
+            this.textEditor.BeginUpdate();
+
+            this.textEditor.Document.HighlightingStrategy = ICSharpCode.TextEditor.Document.HighlightingStrategyFactory.CreateHighlightingStrategy("PHP");
+
+            this.textEditor.Text = sourceCode;
+
+            this.textEditor.EndUpdate();
+            
         }
     }
 }
