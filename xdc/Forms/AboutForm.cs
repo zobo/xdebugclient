@@ -37,7 +37,7 @@ namespace xdc.Forms
             InitializeComponent();
 
             Version v =  Assembly.GetExecutingAssembly().GetName().Version;
-            versionLabel.Text = String.Format("{0}.{1} (revision {2})", v.Major, v.Minor, v.Revision);
+            versionLabel.Text = "1.0 beta 2";
         }
 
         private void button1_Click(object sender, EventArgs e)
