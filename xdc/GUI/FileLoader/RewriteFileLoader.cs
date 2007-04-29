@@ -143,10 +143,12 @@ namespace xdc.GUI.FileLoader
             return (result != null) ? result : null;            
         }
 
-        private DirectoryRewrite GenerateRewritePath(string localFilename, string remoteFilename)
+        public DirectoryRewrite GenerateRewritePath(string localFilename, string remoteFilename)
         {
             List<string> filenameElements;
             List<string> tmpFilenameElements;
+
+            bool isUNC = localFilename.IndexOf("\\\\") == 0;
 
             string separator = Convert.ToString(System.IO.Path.DirectorySeparatorChar);
             if (remoteFilename.IndexOf("/") != -1)
@@ -158,11 +160,19 @@ namespace xdc.GUI.FileLoader
             else
             {
                 filenameElements = new List<string>(
-                    remoteFilename.Split(System.IO.Path.DirectorySeparatorChar)
+                    remoteFilename.Split(
+                        new char[] { System.IO.Path.DirectorySeparatorChar }, 
+                        StringSplitOptions.RemoveEmptyEntries
+                    )
                 );
             }
 
-            tmpFilenameElements = new List<string>(localFilename.Split(System.IO.Path.DirectorySeparatorChar));
+            tmpFilenameElements = new List<string>(
+                localFilename.Split(
+                    new char[] { System.IO.Path.DirectorySeparatorChar },
+                    StringSplitOptions.RemoveEmptyEntries
+                )
+            );
 
             filenameElements.Reverse();
             tmpFilenameElements.Reverse();
@@ -199,9 +209,12 @@ namespace xdc.GUI.FileLoader
 
             for (int j = i; j < tmpFilenameElements.Count; j++)
             {
-                rewriteLocal += tmpFilenameElements[i] + System.IO.Path.DirectorySeparatorChar;
+                rewriteLocal = tmpFilenameElements[j] + System.IO.Path.DirectorySeparatorChar + rewriteLocal;
             }
 
+            if (isUNC)
+                rewriteLocal = "\\\\" + rewriteLocal;
+        
             DirectoryRewrite newRewrite = new DirectoryRewrite();
             newRewrite.remotePath = rewriteRemote;
             newRewrite.localPath = rewriteLocal;

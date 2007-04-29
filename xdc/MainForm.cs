@@ -126,6 +126,8 @@ namespace xdc
 
         private void StopDebuggingSession()
         {
+            _fileLoader = null;
+
             if (_CurrentLocation.line != -1)
             {
                 xdc.Forms.SourceFileForm form = _fileMgr.getFormByRemoteFilename(_CurrentLocation.filename);
@@ -587,6 +589,43 @@ namespace xdc
         {
             if (_client.State == XdebugClientState.Break)
                 this.SendContinuationCommand("step_out");
+        }
+
+        private void test1ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            xdc.GUI.FileLoader.RewriteFileLoader r = new RewriteFileLoader();
+           
+            string remoteFile = "/var/www/htdocs/xdebug/index.php";
+            string localFile = "\\\\Ubuntu\\web\\xdebug\\index.php";
+
+            DirectoryRewrite n = r.GenerateRewritePath(
+                localFile,
+                remoteFile
+            );
+
+            string result = remoteFile.Replace(n.remotePath, n.localPath);
+
+
+            int i = 5;
+
+        }
+
+        private void test2ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            xdc.GUI.FileLoader.RewriteFileLoader r = new RewriteFileLoader();
+
+            string remoteFile = "/var/www/htdocs/xdebug/test/directory/index.php";
+            string localFile = "z:\\xdebug\\test\\directory\\index.php";
+            DirectoryRewrite n = r.GenerateRewritePath(
+                localFile,
+                remoteFile
+            );
+
+            string result = remoteFile.Replace(n.remotePath, n.localPath);
+
+
+
+            int i = 5;
         }
 
     }
