@@ -228,6 +228,8 @@ namespace xdc
 
                     if (handlerResult != DialogResult.OK)
                     {
+                        MessageBox.Show("Can't debug without a source file. Terminating debug session.", "No file loaded.");
+                        this.StopDebuggingSession();
                         return false;
                     }
 
@@ -248,6 +250,7 @@ namespace xdc
 
                 if (!fileLoaded)
                 {
+                    MessageBox.Show("Can't debug without a source file. Terminating debug session.", "No file loaded");
                     this.StopDebuggingSession();
                     return false;
                 }

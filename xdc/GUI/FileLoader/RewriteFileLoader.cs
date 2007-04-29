@@ -106,18 +106,7 @@ namespace xdc.GUI.FileLoader
             bool done = false;
 
             while (!done)
-            {
-                DialogResult r = MessageBox.Show(
-                    "We couldn't open the file:\r\n\r\n" + filename + "\r\n\r\nPerhaps it's on a different server. Do you want to search for it?",
-                    "Local file not found.",
-                    MessageBoxButtons.YesNo
-                );
-
-                if (r != DialogResult.Yes)
-                {
-                    return null;
-                }
-
+            {               
                 OpenFileDialog fileDialog = new OpenFileDialog();
 
                 /* This should have a way to also detect filename[1].php, filename[2].php for
@@ -149,6 +138,8 @@ namespace xdc.GUI.FileLoader
             List<string> tmpFilenameElements;
 
             bool isUNC = localFilename.IndexOf("\\\\") == 0;
+            string remoteFile = System.IO.Path.GetFileName(remoteFilename);
+            string localFile = System.IO.Path.GetFileName(localFilename);
 
             string separator = Convert.ToString(System.IO.Path.DirectorySeparatorChar);
             if (remoteFilename.IndexOf("/") != -1)
@@ -178,11 +169,11 @@ namespace xdc.GUI.FileLoader
             tmpFilenameElements.Reverse();
 
             /* Bail if the filename (first element in the List instances after reverse) do 
-             * not match. This currently breaks FTP access: blaa.php != blaa[1].php */
+             * not match. This currently breaks FTP access: blaa.php != blaa[1].php
             if (filenameElements[0] != tmpFilenameElements[0])
             {
                 return null;
-            }
+            } */
 
             int i = 0;
             foreach (String element in tmpFilenameElements)
@@ -201,7 +192,13 @@ namespace xdc.GUI.FileLoader
             for (int j = i; j < filenameElements.Count; j++)
             {
                 if (filenameElements[j] != "")
-                    rewriteRemote = filenameElements[j] + separator + rewriteRemote;
+                {
+                    if (remoteFile == filenameElements[j])
+                        rewriteRemote = filenameElements[j];
+                    else 
+                        rewriteRemote = filenameElements[j] + separator + rewriteRemote;
+                }
+
             }
 
             if (separator == "/")
@@ -209,7 +206,10 @@ namespace xdc.GUI.FileLoader
 
             for (int j = i; j < tmpFilenameElements.Count; j++)
             {
-                rewriteLocal = tmpFilenameElements[j] + System.IO.Path.DirectorySeparatorChar + rewriteLocal;
+                if (localFile == tmpFilenameElements[j])
+                    rewriteLocal = tmpFilenameElements[j];
+                else 
+                    rewriteLocal = tmpFilenameElements[j] + System.IO.Path.DirectorySeparatorChar + rewriteLocal;
             }
 
             if (isUNC)
