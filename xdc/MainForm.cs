@@ -255,6 +255,10 @@ namespace xdc
                     return false;
                 }
             }
+            else
+            {
+                f.LoadFile(localFilename);
+            }
 
             _fileMgr.Add(filename, localFilename, f);
             f.Show(this.dockPanel, DockState.Document);
