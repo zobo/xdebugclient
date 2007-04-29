@@ -43,11 +43,8 @@ namespace xdc
             this.stepOutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.developmentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.test1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.test2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -56,8 +53,7 @@ namespace xdc
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.debugToolStripMenuItem,
-            this.helpToolStripMenuItem,
-            this.developmentToolStripMenuItem});
+            this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(811, 24);
@@ -77,21 +73,21 @@ namespace xdc
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(111, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.openToolStripMenuItem.Text = "&Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // closeToolStripMenuItem
             // 
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(111, 22);
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.closeToolStripMenuItem.Text = "&Close";
             this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(111, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -175,22 +171,6 @@ namespace xdc
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
-            // developmentToolStripMenuItem
-            // 
-            this.developmentToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.test1ToolStripMenuItem,
-            this.test2ToolStripMenuItem});
-            this.developmentToolStripMenuItem.Name = "developmentToolStripMenuItem";
-            this.developmentToolStripMenuItem.Size = new System.Drawing.Size(82, 20);
-            this.developmentToolStripMenuItem.Text = "Development";
-            // 
-            // test1ToolStripMenuItem
-            // 
-            this.test1ToolStripMenuItem.Name = "test1ToolStripMenuItem";
-            this.test1ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.test1ToolStripMenuItem.Text = "Test #1";
-            this.test1ToolStripMenuItem.Click += new System.EventHandler(this.test1ToolStripMenuItem_Click);
-            // 
             // dockPanel
             // 
             this.dockPanel.ActiveAutoHideContent = null;
@@ -206,13 +186,6 @@ namespace xdc
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
-            // 
-            // test2ToolStripMenuItem
-            // 
-            this.test2ToolStripMenuItem.Name = "test2ToolStripMenuItem";
-            this.test2ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.test2ToolStripMenuItem.Text = "Test #2";
-            this.test2ToolStripMenuItem.Click += new System.EventHandler(this.test2ToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -252,9 +225,6 @@ namespace xdc
         private System.Windows.Forms.ToolStripMenuItem stepOverToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem stepInToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem stepOutToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem developmentToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem test1ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem test2ToolStripMenuItem;
     }
 }
 
