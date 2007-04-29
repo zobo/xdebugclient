@@ -29,6 +29,7 @@ using System.Windows.Forms;
 
 
 using WeifenLuo.WinFormsUI;
+using WeifenLuo.WinFormsUI.Docking;
 using ICSharpCode.TextEditor;
 using ICSharpCode.TextEditor.Document;
 using xdc.XDebug;

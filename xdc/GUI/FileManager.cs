@@ -106,6 +106,20 @@ namespace xdc.GUI
             }
         }
 
+        public string GetLocalFilename(string RemoteFilename)
+        {
+            foreach (OpenFileStruct file in _openFiles.Values)
+            {
+                if (file.remoteFilename == RemoteFilename)
+                {
+                    return file.localFilename;
+                }
+            }
+
+
+            return "";
+        }
+
         public SourceFileForm getFormByLocalFilename(string filename)
         {
             if (_openFiles.ContainsKey(filename))

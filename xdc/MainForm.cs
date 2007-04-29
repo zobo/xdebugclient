@@ -29,7 +29,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.IO;
 
-using WeifenLuo.WinFormsUI;
+using WeifenLuo.WinFormsUI.Docking;
 using ICSharpCode.TextEditor;
 using ICSharpCode.TextEditor.Document;
 
@@ -120,6 +120,7 @@ namespace xdc
                 startListeningToolStripMenuItem.Enabled = true;
                 stopDebuggingToolStripMenuItem.Enabled = false;
                 openToolStripMenuItem.Enabled = false;
+                closeToolStripMenuItem.Enabled = false;
             }
 
         }
@@ -131,7 +132,9 @@ namespace xdc
             if (_CurrentLocation.line != -1)
             {
                 xdc.Forms.SourceFileForm form = _fileMgr.getFormByRemoteFilename(_CurrentLocation.filename);
-                form.RemoveActiveMark();
+                
+                if (form != null)
+                    form.RemoveActiveMark();
             }
 
             _client.Disconnect();
@@ -204,7 +207,7 @@ namespace xdc
             string localFilename = filename;
 
             xdc.Forms.SourceFileForm sff = _fileMgr.getFormByRemoteFilename(filename);
-
+            
             if (sff != null)
             {
                 sff.Focus();
@@ -212,6 +215,7 @@ namespace xdc
             }
 
             xdc.Forms.SourceFileForm f = new xdc.Forms.SourceFileForm(_client, filename);
+            
 
             f.FormClosed += new FormClosedEventHandler(SourceFileForm_FileClosed);
             f.Text = baseFile;
@@ -269,7 +273,7 @@ namespace xdc
             // XdebugClient is able to restore bookmarks whenever a script is rerun.
             f.getBookmarkManager().Added   += new BookmarkEventHandler(BreakpointAdded);
             f.getBookmarkManager().Removed += new BookmarkEventHandler(BreakpointRemoved);
-
+          
             return true;
         }
         #endregion
@@ -451,8 +455,12 @@ namespace xdc
         private void SourceFileForm_FileClosed(object sender, FormClosedEventArgs e)
         {
             xdc.Forms.SourceFileForm f = sender as xdc.Forms.SourceFileForm;
+            string localFilename = _fileMgr.GetLocalFilename(f.getFilename());
 
-            _fileMgr.Remove(f.getFilename());
+            _fileMgr.Remove(localFilename);
+
+            closeToolStripMenuItem.Enabled = _fileMgr.HasOpenFiles;
+            
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -515,12 +523,22 @@ namespace xdc
 
         private void closeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.dockPanel.ActiveDocument.DockHandler.Close();
+            IDockContent content = this.dockPanel.ActiveDocument;
 
+            if (content is xdc.Forms.SourceFileForm)
+            {
+                xdc.Forms.SourceFileForm form = (content as xdc.Forms.SourceFileForm);
+                string localFilename = _fileMgr.GetLocalFilename(form.getFilename());
+
+                if (localFilename != "")
+                    _fileMgr.Remove(localFilename);
+            }
+            
             if (!_fileMgr.HasOpenFiles)
             {
                 closeToolStripMenuItem.Enabled = false;
             }
+            content.DockHandler.Close();
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -540,25 +558,15 @@ namespace xdc
         {
             if (_client.State == XdebugClientState.Initialized)
             {
-                /* Keep all the breakpoints of the files that are still open.
-                 * This should probably be replaced by code in the SourceFileView_closing
-                 * form triggering removal of all it's breakpoints.
-                
+                /* Keep all the breakpoints of the files that are still open. */                                 
                 foreach (Breakpoint p in _breakpointMgr.Breakpoints)
                 {
                     if (_fileMgr.getFormByRemoteFilename(p.filename) != null)
                     {
                         if (!_breakpointMgr.AddedBreakpoints.Contains(p))
                             _breakpointMgr.AddedBreakpoints.Add(p);
-                    }
-                 * 
-                 * THIS WILL BREAK, can't change collection halve way through.
-                 * 
-                    else
-                    {
-                        _breakpointMgr.Breakpoints.Remove(p);
-                    }
-                } */
+                    }                 
+                }
             }
 
             foreach (Breakpoint b in _breakpointMgr.AddedBreakpoints)
