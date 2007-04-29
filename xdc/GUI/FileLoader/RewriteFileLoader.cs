@@ -1,6 +1,6 @@
 /*
  * Copyright (C), 2007, Mathieu Kooiman < xdc@scriptorama.nl> 
- * $Id: SourceFileForm.cs 4 2007-04-14 14:53:17Z mathieuk $
+ * $Id$
  * 
  * This file is part of XDebugClient.
  *
