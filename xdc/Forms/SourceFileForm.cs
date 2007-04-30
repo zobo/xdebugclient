@@ -169,7 +169,8 @@ namespace xdc.Forms
                 {
                     mgr.RemoveMark(mark);
                     this.textEditor.Document.CustomLineManager.RemoveCustomLine(mark.LineNumber);
-                    return;
+
+                    break;
                 }
             }
 
