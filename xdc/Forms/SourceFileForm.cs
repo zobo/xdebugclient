@@ -71,6 +71,11 @@ namespace xdc.Forms
         {
             return this._filename;
         }
+
+        public void setFilename(string filename)
+        {
+            this._filename = filename;
+        }
        
         public void ToggleMenuItems(bool started)
         {

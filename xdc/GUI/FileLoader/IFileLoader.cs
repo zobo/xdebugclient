@@ -42,6 +42,7 @@ namespace xdc.GUI.FileLoader
             
         public abstract bool OpenFile(xdc.Forms.SourceFileForm targetForm, string filename);
         public abstract bool DetermineLocalFilename(string filename, ref string localFilename);
+        public abstract bool DetermineRemoteFilename(string localFilename, ref string tmpRemoteFilename);        
     }
 
 }

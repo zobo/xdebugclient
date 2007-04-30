@@ -134,7 +134,7 @@ namespace xdc
                 xdc.Forms.SourceFileForm form = _fileMgr.getFormByRemoteFilename(_CurrentLocation.filename);
                 
                 if (form != null)
-                    form.RemoveActiveMark();
+                    form.RemoveActiveMark();                
             }
 
             _client.Disconnect();
@@ -261,7 +261,26 @@ namespace xdc
             }
             else
             {
-                f.LoadFile(localFilename);
+                /* The user might've opened a file that appears to be local (opened via network, for instance)
+                 * that should be mapped to a remote path. If we have a fileLoader instance, see if it 
+                 * can rewrite the file for us. */
+
+                if (_fileLoader != null)
+                {
+                    string tmpRemoteFilename = "";
+                    if (_fileLoader.DetermineRemoteFilename(localFilename, ref tmpRemoteFilename))
+                    {
+                        f.TabText = tmpRemoteFilename;
+
+                        /* The filename in the SourceFileForm is always considered
+                         * to be the filename expected by xdebug, so update it to
+                         * the remote version */
+                        f.setFilename(tmpRemoteFilename);
+                        filename = tmpRemoteFilename;
+                    }
+                }
+
+                f.LoadFile(localFilename);                
             }
 
             _fileMgr.Add(filename, localFilename, f);
@@ -416,13 +435,14 @@ namespace xdc
         }
 
         private bool OnXdebugConnectionInitialized(XDebugEventArgs e)
-        {
-          
-            this.ToggleMenuItems(true);
+        {                     
+            if (this.LoadFile(e.Filename))
+            {
+                this.ToggleMenuItems(true);
+                return true;
+            }
 
-         
-
-           return this.LoadFile(e.Filename);
+            return false;
         }
 
         #endregion

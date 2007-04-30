@@ -41,6 +41,12 @@ namespace xdc.GUI.FileLoader
             return true;
         }
 
+        public override bool DetermineRemoteFilename(string localFilename, ref string tmpRemoteFilename)
+        {
+            tmpRemoteFilename = localFilename;
+            return true;
+        }
+
         public override bool OpenFile(xdc.Forms.SourceFileForm targetForm, string filename)
         {
             string sourceCode = _client.Source(filename);

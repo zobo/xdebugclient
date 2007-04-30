@@ -62,6 +62,26 @@ namespace xdc.GUI.FileLoader
         }
         #endregion
 
+        public override bool DetermineRemoteFilename(string localFilename, ref string remoteFilename)
+        {
+            foreach (DirectoryRewrite r in RewriteDirectories)
+            {
+                if (localFilename.IndexOf(r.localPath) != -1)
+                {
+                    remoteFilename = localFilename.Replace(r.localPath, r.remotePath);
+
+                    if (r.remotePath[0] == '/')
+                        remoteFilename = remoteFilename.Replace(
+                            System.IO.Path.DirectorySeparatorChar,
+                            System.IO.Path.AltDirectorySeparatorChar
+                        );
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
         public override bool DetermineLocalFilename(string filename, ref string localFilename)
         {
             /* First try to find any existing rewrite rules. */
@@ -71,6 +91,8 @@ namespace xdc.GUI.FileLoader
                 if (filename.IndexOf(r.remotePath) != -1)
                 {                    
                     localFilename = filename.Replace(r.remotePath, r.localPath);
+
+
 
                     return true;
                 }
