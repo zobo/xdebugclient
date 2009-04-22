@@ -32,16 +32,28 @@ namespace xdc.GUI
     {
         private string _Name;
         private string _Value;
+        private string _FullValue;
         
         public Property Property;
 
         public string Name { get { return _Name; } }
         public string Value { get { return _Value; } }
+        public string FullValue { get { return _FullValue; } }
 
         public DebugNode(Property p)
         {
             _Name = p.Name;
-            _Value = p.Value;
+
+            if (p.Value.Length > 100 || p.Value.IndexOf("\n") > 0)
+            {
+                _Value = "<String> (" + p.Value.Length + ")";
+                _FullValue = p.Value;
+            }
+            else
+            {
+                _Value = p.Value;
+                _FullValue = "";
+            }
 
             this.Property = p;
             this.Tag = p;

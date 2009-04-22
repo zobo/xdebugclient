@@ -212,13 +212,18 @@ namespace xdc.Forms
         {
             if (_xdebugClient.State == XdebugClientState.Break)
             {
-                string s = textEditor.ActiveTextAreaControl.SelectionManager.SelectedText;
+                string s;
+
+                if (textEditor.ActiveTextAreaControl.SelectionManager.HasSomethingSelected)
+                    s = textEditor.ActiveTextAreaControl.SelectionManager.SelectedText;
+                else
+                    s = ICSharpCode.TextEditor.Document.TextUtilities.GetWordAt(textEditor.ActiveTextAreaControl.Document, textEditor.ActiveTextAreaControl.Caret.Offset);
 
                 Property p = _xdebugClient.GetPropertyValue(s, 0);
 
                 if (p == null)
                 {
-                    MessageBox.Show("Property '" + s + "' is not available in this scope.", "Unavailable");
+                    MessageBox.Show("Property \"" + s + "\" is not available in this scope.", "Unavailable");
                     return;
                 }
 

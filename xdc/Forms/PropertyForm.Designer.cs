@@ -34,6 +34,7 @@ namespace xdc.Forms
             this.nodeTextBox1 = new Aga.Controls.Tree.NodeControls.NodeTextBox();
             this.nodeTextBox2 = new Aga.Controls.Tree.NodeControls.NodeTextBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.nodeEllipsisButton1 = new Aga.Controls.Tree.NodeControls.NodeEllipsisButton();
             this.SuspendLayout();
             // 
             // treeViewAdv1
@@ -53,9 +54,8 @@ namespace xdc.Forms
             this.treeViewAdv1.Model = null;
             this.treeViewAdv1.Name = "treeViewAdv1";
             this.treeViewAdv1.NodeControls.Add(this.nodeTextBox1);
+            this.treeViewAdv1.NodeControls.Add(this.nodeEllipsisButton1);
             this.treeViewAdv1.NodeControls.Add(this.nodeTextBox2);
-            this.treeViewAdv1.Search.BackColor = System.Drawing.Color.Pink;
-            this.treeViewAdv1.Search.FontColor = System.Drawing.Color.Black;
             this.treeViewAdv1.SelectedNode = null;
             this.treeViewAdv1.Size = new System.Drawing.Size(691, 395);
             this.treeViewAdv1.TabIndex = 0;
@@ -66,24 +66,30 @@ namespace xdc.Forms
             // 
             this.treeColumn1.Header = "Name";
             this.treeColumn1.SortOrder = System.Windows.Forms.SortOrder.None;
+            this.treeColumn1.TooltipText = null;
             this.treeColumn1.Width = 300;
             // 
             // treeColumn2
             // 
             this.treeColumn2.Header = "Value";
             this.treeColumn2.SortOrder = System.Windows.Forms.SortOrder.None;
+            this.treeColumn2.TooltipText = null;
             this.treeColumn2.Width = 300;
             // 
             // nodeTextBox1
             // 
             this.nodeTextBox1.DataPropertyName = "Name";
             this.nodeTextBox1.EditEnabled = false;
+            this.nodeTextBox1.IncrementalSearchEnabled = true;
+            this.nodeTextBox1.LeftMargin = 3;
             this.nodeTextBox1.ParentColumn = this.treeColumn1;
             // 
             // nodeTextBox2
             // 
             this.nodeTextBox2.DataPropertyName = "Value";
             this.nodeTextBox2.EditEnabled = false;
+            this.nodeTextBox2.IncrementalSearchEnabled = true;
+            this.nodeTextBox2.LeftMargin = 3;
             this.nodeTextBox2.ParentColumn = this.treeColumn2;
             // 
             // button1
@@ -96,6 +102,12 @@ namespace xdc.Forms
             this.button1.Text = "&Close";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // nodeEllipsisButton1
+            // 
+            this.nodeEllipsisButton1.DataPropertyName = "FullValue";
+            this.nodeEllipsisButton1.LeftMargin = 0;
+            this.nodeEllipsisButton1.ParentColumn = this.treeColumn2;
             // 
             // PropertyForm
             // 
@@ -118,5 +130,6 @@ namespace xdc.Forms
         private Aga.Controls.Tree.NodeControls.NodeTextBox nodeTextBox1;
         private Aga.Controls.Tree.NodeControls.NodeTextBox nodeTextBox2;
         private System.Windows.Forms.Button button1;
+        private Aga.Controls.Tree.NodeControls.NodeEllipsisButton nodeEllipsisButton1;
     }
 }

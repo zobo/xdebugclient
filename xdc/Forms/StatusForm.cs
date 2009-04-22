@@ -45,7 +45,9 @@ namespace xdc.Forms
 
         public void WriteStatusLine(string line)
         {
-            this.textBox1.Text = "[" + System.DateTime.Now.ToLongTimeString() + "] " + line + "\r\n" + this.textBox1.Text;
+            this.textBox1.Text += "[" + System.DateTime.Now.ToLongTimeString() + "] " + line + "\r\n";
+            this.textBox1.Select(this.textBox1.Text.Length + 1, 0);
+            this.textBox1.ScrollToCaret();
         }
 
     }

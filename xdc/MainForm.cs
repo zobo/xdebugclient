@@ -427,6 +427,27 @@ namespace xdc
             _statusFrm.WriteStatusLine("(!) Script finished.");
 
             this.StopDebuggingSession();
+
+            if (xdc.Properties.Settings.Default.auto_restart)
+            {
+                _statusFrm.WriteStatusLine("(-) Automatically restarting debugging.");
+
+                try
+                {
+                    _client.listenForConnection();
+
+                    startListeningToolStripMenuItem.Enabled = false;
+                    stopDebuggingToolStripMenuItem.Enabled = true;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(
+                        "Unable to re-create listening socket: " + ex.Message,
+                        "Cannot open socket",
+                        MessageBoxButtons.OK
+                    );
+                }
+            }
         }
 
         private void OnXdebugMessageReceived(XDebugEventArgs e)
@@ -624,6 +645,12 @@ namespace xdc
         {
             if (_client.State == XdebugClientState.Break)
                 this.SendContinuationCommand("step_out");
-        }       
+        }
+
+        private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            xdc.Forms.ConfigForm cf = new xdc.Forms.ConfigForm();
+            cf.ShowDialog();
+        }
     }
 }

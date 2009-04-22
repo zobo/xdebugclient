@@ -78,13 +78,19 @@ namespace xdc.XDebug
             {
                 if (this.handleInitMessage(initMessage))
                 {
-                    /* We'd like to know when Fatal errors occur */
-                    XDebug.Command c = new Command("breakpoint_set", "-t exception -x \"Fatal error\"");
-                    XDebug.Response r = this.SendCommand(c);
+                    if (xdc.Properties.Settings.Default.break_on_fatal_errors)
+                    {
+                        /* We'd like to know when Fatal errors occur */
+                        XDebug.Command c = new Command("breakpoint_set", "-t exception -x \"Fatal error\"");
+                        XDebug.Response r = this.SendCommand(c);
+                    }
 
-                    /* We'd like to know when Notices occur */
-                    XDebug.Command c2 = new Command("breakpoint_set", "-t exception -x \"Notice\"");
-                    XDebug.Response r2 = this.SendCommand(c2);
+                    if (xdc.Properties.Settings.Default.break_on_notices)
+                    {
+                        /* We'd like to know when Notices occur */
+                        XDebug.Command c2 = new Command("breakpoint_set", "-t exception -x \"Notice\"");
+                        XDebug.Response r2 = this.SendCommand(c2);
+                    }
                   
                     return true;
                 }
@@ -196,6 +202,7 @@ namespace xdc.XDebug
                         break;
 
                     case "stopped":
+                    case "stopping":
                         /* Script's done. */
 
                         this.Disconnect();
