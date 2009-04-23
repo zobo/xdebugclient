@@ -242,8 +242,6 @@
     <Content Include="lgpl.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Resources\ellipsis_normal.gif" />
-    <None Include="Resources\ellipsis_pressed.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

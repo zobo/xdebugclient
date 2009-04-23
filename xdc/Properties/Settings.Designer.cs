@@ -58,5 +58,17 @@ namespace xdc.Properties {
                 this["auto_restart"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("9000")]
+        public string listening_port {
+            get {
+                return ((string)(this["listening_port"]));
+            }
+            set {
+                this["listening_port"] = value;
+            }
+        }
     }
 }

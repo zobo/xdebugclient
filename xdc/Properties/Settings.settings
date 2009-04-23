@@ -11,5 +11,8 @@
     <Setting Name="auto_restart" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="listening_port" Type="System.String" Scope="User">
+      <Value Profile="(Default)">9000</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

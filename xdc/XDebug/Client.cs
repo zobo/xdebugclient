@@ -26,6 +26,7 @@ using System.Web;
 using System.Net;
 using System.Net.Sockets;
 using System.Xml;
+using System.Windows.Forms;
 
 namespace xdc.XDebug
 {
@@ -110,6 +111,8 @@ namespace xdc.XDebug
         {
             string remoteURI = "file://";
 
+            string s;
+
             if (URI[0] != '/')
                 remoteURI += "/";
 
@@ -123,7 +126,15 @@ namespace xdc.XDebug
                 throw new Exception("Parse error");
             }
 
-            return base64ToASCII(r.XmlMessage.InnerText);
+            if (r.XmlMessage.InnerText == "can not open file")
+            {
+                MessageBox.Show("Could not load source file. Possibly the source file is empty. Continuing with empty file...","Source file");
+                s = "";
+            }
+            else
+                s = r.XmlMessage.InnerText;
+	
+            return base64ToASCII(s);
         }
        
         /// <summary>
@@ -406,12 +417,20 @@ namespace xdc.XDebug
             _listener = new Socket(AddressFamily.InterNetwork,
                               SocketType.Stream, ProtocolType.Tcp);
 
-            _listener.Bind(new IPEndPoint(IPAddress.Any, 9000));
+            _listener.Bind(new IPEndPoint(IPAddress.Any, _port));
             _listener.Listen(1);
 
             AsyncCallback c = new AsyncCallback(OnConnectRequest);
             
             _listener.BeginAccept(new AsyncCallback(OnConnectRequest), _listener);
+        }
+
+        /// <summary>
+        /// Set the port that is used next time when listenForConnection() is called
+        /// </summary>
+        public void setListeningPort(int port)
+        {
+            _port = port;
         }
 
         /// <summary>

@@ -57,8 +57,8 @@ namespace xdc
         public MainForm()
         {
             InitializeComponent();
-            
-            _client = new xdc.XDebug.Client("localhost", 9000);                         
+
+            _client = new xdc.XDebug.Client("localhost", 9000);
             _client.EventCallback += new XDebugEventHandler(XDebugEventCallback);
 
             // Get the forms up. 
@@ -532,6 +532,20 @@ namespace xdc
 
             try
             {
+                int port;
+
+                try
+                {
+                    port = Convert.ToInt32(xdc.Properties.Settings.Default.listening_port);
+                }
+                catch
+                {
+                    MessageBox.Show("An invalid port number has been set in options, using 9000.", "Invalid port number");
+                    port = 9000;
+                }
+
+
+                _client.setListeningPort(port);
                 _client.listenForConnection();
 
                 startListeningToolStripMenuItem.Enabled = false;
