@@ -14,5 +14,8 @@
     <Setting Name="listening_port" Type="System.String" Scope="User">
       <Value Profile="(Default)">9000</Value>
     </Setting>
+    <Setting Name="break_on_script_start" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

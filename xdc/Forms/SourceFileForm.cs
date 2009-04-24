@@ -58,8 +58,10 @@ namespace xdc.Forms
             this.textEditor.TextEditorProperties.CreateBackupCopy = false;
             
             this.textEditor.ActiveTextAreaControl.TextArea.IconBarMargin.MouseDown += new ICSharpCode.TextEditor.MarginMouseEventHandler(OnIconBarMarginMouseDown);
+            this.textEditor.ActiveTextAreaControl.TextArea.KeyDown += new System.Windows.Forms.KeyEventHandler(OnTextEditorKeyDown);
             this.textEditor.Document.BookmarkManager.Removed += new ICSharpCode.TextEditor.Document.BookmarkEventHandler(OnBookmarkRemoved);
-            this.textEditor.Document.BookmarkManager.Added += new ICSharpCode.TextEditor.Document.BookmarkEventHandler(OnBookmarkAdded);        
+            this.textEditor.Document.BookmarkManager.Added += new ICSharpCode.TextEditor.Document.BookmarkEventHandler(OnBookmarkAdded);
+            this.textEditor.ActiveTextAreaControl.TextArea.ToolTipRequest += new ToolTipRequestEventHandler(OnToolTipRequest);
         }
 
         public void LoadFile(string filename)
@@ -140,10 +142,36 @@ namespace xdc.Forms
                     )
                 );
 
-                this.RedrawBreakpoints();                
+                this.RedrawBreakpoints();
                                   
                 marginObj.Paint(marginObj.TextArea.CreateGraphics(), marginObj.TextArea.DisplayRectangle);
             }            
+        }
+
+        void OnTextEditorKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode != Keys.F9)
+                return;
+
+            ICSharpCode.TextEditor.TextArea area_obj = (ICSharpCode.TextEditor.TextArea)sender;
+
+            ICSharpCode.TextEditor.Document.LineSegment l = area_obj.Document.GetLineSegment(area_obj.Caret.Line);
+            string s = area_obj.Document.GetText(l);
+            if (s.Trim().Length == 0)
+                return;
+
+            ICSharpCode.TextEditor.Document.BookmarkManager bm = this.textEditor.Document.BookmarkManager;
+
+            if (bm.IsMarked(area_obj.Caret.Line))
+                bm.RemoveMark(bm.GetNextMark(area_obj.Caret.Line-1));
+            else
+                this.textEditor.Document.BookmarkManager.AddMark(new Breakpoint(this._filename,this.textEditor.Document,area_obj.Caret.Line));
+
+            // this.textEditor.Document.RequestUpdate(new TextAreaUpdate(TextAreaUpdateType.SingleLine, area_obj.Caret.Line));
+
+            this.RedrawBreakpoints();
+
+            // area_obj.IconBarMargin.Paint(area_obj.IconBarMargin.TextArea.CreateGraphics(), area_obj.IconBarMargin.TextArea.DisplayRectangle);
         }
 
         public void SetActiveMark(int Line)
@@ -206,6 +234,42 @@ namespace xdc.Forms
 
             this.textEditor.Document.CommitUpdate();            
         }
+
+        void OnToolTipRequest(object sender, ToolTipRequestEventArgs e)
+        {
+            if (e.InDocument && !e.ToolTipShown && _xdebugClient.State == XdebugClientState.Break)
+            {
+                ICSharpCode.TextEditor.TextArea area_obj = (ICSharpCode.TextEditor.TextArea)sender;
+
+                string s = ICSharpCode.TextEditor.Document.TextUtilities.GetWordAt(area_obj.Document, area_obj.Document.PositionToOffset(new Point(e.LogicalPosition.X, e.LogicalPosition.Y)));
+
+                if (area_obj.Document.GetCharAt(MyFindWordStart(area_obj.Document, area_obj.Document.PositionToOffset(new Point(e.LogicalPosition.X, e.LogicalPosition.Y))) - 1).ToString() == "$")
+                    s = "$" + s;
+
+                if (s != "")
+                {
+                    Property p = _xdebugClient.GetPropertyValue(s, 0);
+
+                    if (p != null)
+                        e.ShowToolTip(p.Value);
+                }
+            }
+        }
+
+        // ICSharpCode.TextEditor.Document.TextUtilities.FindWordStart did not work in the
+        // Assembly I used, so I copied this from source
+        public static int MyFindWordStart(IDocument document, int offset)
+        {
+            LineSegment line = document.GetLineSegmentForOffset(offset);
+            int lineOffset = line.Offset;
+            while (offset > lineOffset && ICSharpCode.TextEditor.Document.TextUtilities.IsLetterDigitOrUnderscore(document.GetCharAt(offset - 1)))
+            {
+                --offset;
+            }
+
+            return offset;
+        }
+
         #endregion
 
         private void inspectToolStripMenuItem_Click(object sender, EventArgs e)

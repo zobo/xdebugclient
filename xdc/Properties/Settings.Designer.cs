@@ -70,5 +70,17 @@ namespace xdc.Properties {
                 this["listening_port"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool break_on_script_start {
+            get {
+                return ((bool)(this["break_on_script_start"]));
+            }
+            set {
+                this["break_on_script_start"] = value;
+            }
+        }
     }
 }

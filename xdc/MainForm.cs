@@ -366,6 +366,9 @@ namespace xdc
                 if (_client.Initialize())
                 {
                     _statusFrm.WriteStatusLine("(-) XDebugClient initialized.");
+
+                    if (!xdc.Properties.Settings.Default.break_on_script_start)
+                        this.SendContinuationCommand("run");
                 }
                 else
                 {                  
