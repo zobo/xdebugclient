@@ -96,7 +96,7 @@ namespace xdc.XDebug
 
                 if (propType == "array")
                 {
-                    rootProperty.Value = "Array (" + firstProperty.Attributes["numchildren"].Value + ")";
+                    rootProperty.Value = "Array (" + (firstProperty.Attributes["numchildren"] != null ? firstProperty.Attributes["numchildren"].Value : "") + ")";
                 } else {
                     rootProperty.Value = "Instance of " + firstProperty.Attributes["classname"].Value;
                  }
@@ -107,8 +107,8 @@ namespace xdc.XDebug
                 }
                 else
                 {
-                    int numChildren = Convert.ToInt32(firstProperty.Attributes["numchildren"].Value);
-                    rootProperty.isComplete = numChildren == firstProperty.ChildNodes.Count;
+                    int numChildren = firstProperty.Attributes["numchildren"] != null ? Convert.ToInt32(firstProperty.Attributes["numchildren"].Value) : 0;
+                    rootProperty.isComplete = numChildren > 0 && numChildren == firstProperty.ChildNodes.Count;
 
                     foreach (XmlNode node in firstProperty.ChildNodes)
                     {
