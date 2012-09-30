@@ -293,7 +293,7 @@ namespace xdc.Forms
 
                 PropertyForm propForm = new PropertyForm(_xdebugClient);
 
-                propForm.LoadProperty(p, null);
+                propForm.LoadProperty(p);
 
                 propForm.Show();
             }      

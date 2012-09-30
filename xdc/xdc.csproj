@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{78EE81FD-EBE9-4AE2-A4CE-1697991036AA}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -125,6 +125,12 @@
     <Compile Include="GUI\NodeEllipsisButton.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GUI\ProperyControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\ProperyControl.designer.cs">
+      <DependentUpon>ProperyControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="XDebug\ActiveMark.cs" />
     <Compile Include="XDebug\BreakpointManager.cs" />
     <Compile Include="Forms\SourceFileForm.cs">
@@ -176,6 +182,9 @@
     <EmbeddedResource Include="Forms\StatusForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>StatusForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\ProperyControl.resx">
+      <DependentUpon>ProperyControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <SubType>Designer</SubType>

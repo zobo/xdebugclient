@@ -35,6 +35,7 @@ namespace xdc.GUI
         private string _FullValue;
         
         public Property Property;
+        public bool Changed = false;
 
         public string Name { get { return _Name; } }
         public string Value { get { return _Value; } }

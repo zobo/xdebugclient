@@ -40,75 +40,16 @@ namespace xdc.Forms
 {
     public partial class PropertyForm : Form
     {
-        private TreeModel _Model;
-        private xdc.XDebug.Client _client; 
         public PropertyForm(xdc.XDebug.Client client)
         {
             InitializeComponent();
 
-            _client = client;
-
-            _Model = new TreeModel();
-            treeViewAdv1.Model = _Model;
-            
-            treeViewAdv1.Expanding += new EventHandler<TreeViewAdvEventArgs>(treeViewAdv1_Expanding);
-            
+            properyControl1.Client = client;
         }
 
-        void treeViewAdv1_Expanding(object sender, TreeViewAdvEventArgs e)
+        public void LoadProperty(Property p)
         {
-            if (_client.State != XdebugClientState.Break)
-            {
-                MessageBox.Show(
-                    "This property is no longer available. Close the Property window and try running the script again.",
-                    "Property invalidated",
-                    MessageBoxButtons.OK
-                );
-
-                return;
-            }
-
-            DebugNode node = e.Node.Tag as DebugNode;
-            if ( node != null && !node.Property.isComplete)
-            {
-                Property p = _client.GetPropertyValue(node.Property.FullName, 0);
-
-                /* We don't want 'p' itself. It will be a copy of the node that
-                 * was marked as inComplete. */
-                foreach (Property child in p.ChildProperties)
-                {
-                    DebugNode newNode = this.BuildDebugNode(child, node);
-
-                    node.Nodes.Add(newNode);
-                }
-
-                node.Property.isComplete = true;
-            }          
-        }
-
-        public DebugNode BuildDebugNode(Property p, DebugNode Parent)
-        {
-            DebugNode newNode = new DebugNode(p);
-
-            if (Parent != null && Parent is DebugNode)
-            {
-                newNode.Parent = Parent;
-            }
-
-            foreach (Property Child in p.ChildProperties)
-            {
-                DebugNode tmpNode = this.BuildDebugNode(Child, newNode);                
-            }
-
-            return newNode;
-
-        }
-
-        public void LoadProperty(Property p, DebugNode Parent)
-        {
-            DebugNode newNode = this.BuildDebugNode(p, Parent);
-
-            _Model.Nodes.Add(newNode);            
+            properyControl1.LoadProperty(p);
         }
         private void button1_Click(object sender, EventArgs e)
         {
