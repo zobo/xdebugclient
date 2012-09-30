@@ -369,6 +369,8 @@ namespace xdc
 
                     if (!xdc.Properties.Settings.Default.break_on_script_start)
                         this.SendContinuationCommand("run");
+                    else
+                        this.SendContinuationCommand("step_into");
                 }
                 else
                 {                  
