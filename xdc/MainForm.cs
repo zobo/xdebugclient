@@ -43,6 +43,8 @@ namespace xdc
     {
         private xdc.Forms.StatusForm _statusFrm;
         private xdc.Forms.CallstackForm _callstackFrm;
+        private xdc.Forms.ContextForm _localContextFrm;
+        private xdc.Forms.ContextForm _globalContextFrm;
 
         private xdc.XDebug.Client _client;
         
@@ -64,6 +66,8 @@ namespace xdc
             // Get the forms up. 
             _statusFrm    = new xdc.Forms.StatusForm();
             _callstackFrm = new xdc.Forms.CallstackForm();
+            _localContextFrm = new xdc.Forms.ContextForm(_client, "Locals"); // todo, name etc
+            _globalContextFrm = new xdc.Forms.ContextForm(_client, "Globals"); // todo, name etc
 
             // Helper objects
             _breakpointMgr = new BreakpointManager();
@@ -404,6 +408,11 @@ namespace xdc
 
             List<StackEntry> callstack = _client.GetCallStack(-1);
             _callstackFrm.setCallstack(callstack);
+            // local and global context
+            List<Property> ctx = _client.getContext("0", 0);
+            _localContextFrm.LoadPropertyList(ctx);
+            ctx = _client.getContext("1", 0);
+            _globalContextFrm.LoadPropertyList(ctx);
         }
 
         private void OnXdebugErrorOccurred(XDebugEventArgs e)
@@ -524,6 +533,8 @@ namespace xdc
         {
             _callstackFrm.Show(this.dockPanel, DockState.DockBottom);
             _statusFrm.Show(_callstackFrm.Pane, _callstackFrm);
+            _localContextFrm.Show(this.dockPanel, DockState.DockBottom);
+            _globalContextFrm.Show(this.dockPanel, DockState.DockBottom);
         }
        
         private void runToolStripMenuItem_Click(object sender, EventArgs e)

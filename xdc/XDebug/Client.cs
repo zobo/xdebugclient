@@ -323,6 +323,45 @@ namespace xdc.XDebug
         }
 
         /// <summary>
+        /// Get properties for specified context
+        /// </summary>
+        /// <param name="name">Context name (0,1,2)</param>
+        /// <param name="depth">Stack depth</param>
+        /// <returns></returns>
+        public List<Property> getContext(string name, int depth)
+        {
+            XDebug.Command c;
+            XDebug.Response resp;
+            List<Property> ret = null;
+            XmlNode propertyNode;
+
+            c = new Command(
+                "context_get",
+                String.Format("-d {0} -c {1}", depth, name)
+                );
+
+            resp = this.SendCommand(c);
+
+            if (resp == null)
+            {
+                return null;
+            }
+
+            propertyNode = resp.XmlMessage.DocumentElement.FirstChild;
+
+            if (propertyNode.Name == "property")
+            {
+                ret = new List<Property>();
+                while (propertyNode != null)
+                {
+                    ret.Add(Property.Parse(propertyNode));
+                    propertyNode = propertyNode.NextSibling;
+                }
+            }
+            return ret;
+        }
+
+        /// <summary>
         /// Get the value of property. If the result is paged, xdebug returns at most
         /// 32 entries by default, all pages are fetched. Returns a tree of Property instances.      
         /// </summary>        

@@ -99,6 +99,12 @@
     <Compile Include="Forms\ConfigForm.Designer.cs">
       <DependentUpon>ConfigForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ContextForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ContextForm.designer.cs">
+      <DependentUpon>ContextForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FileHandlingForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -163,6 +169,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ConfigForm.resx">
       <DependentUpon>ConfigForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ContextForm.resx">
+      <DependentUpon>ContextForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FileHandlingForm.resx">
       <SubType>Designer</SubType>
