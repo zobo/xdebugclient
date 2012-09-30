@@ -112,6 +112,7 @@ namespace xdc.XDebug
 
                     foreach (XmlNode node in firstProperty.ChildNodes)
                     {
+                        if (node.Attributes["name"].Value == "CLASSNAME") continue; // this is to handle http://bugs.xdebug.org/bug_view_page.php?bug_id=00000518
                         rootProperty.ChildProperties.Add(Property.Parse(node));                        
                     }
                 }
