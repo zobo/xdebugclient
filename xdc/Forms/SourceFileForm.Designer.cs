@@ -32,6 +32,7 @@ namespace xdc.Forms
             this.textEditor = new ICSharpCode.TextEditor.TextEditorControl();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.inspectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.runToCursorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -51,9 +52,10 @@ namespace xdc.Forms
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.inspectToolStripMenuItem});
+            this.inspectToolStripMenuItem,
+            this.runToCursorToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 48);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 70);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // inspectToolStripMenuItem
@@ -62,6 +64,13 @@ namespace xdc.Forms
             this.inspectToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.inspectToolStripMenuItem.Text = "Inspect";
             this.inspectToolStripMenuItem.Click += new System.EventHandler(this.inspectToolStripMenuItem_Click);
+            // 
+            // runToCursorToolStripMenuItem
+            // 
+            this.runToCursorToolStripMenuItem.Name = "runToCursorToolStripMenuItem";
+            this.runToCursorToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.runToCursorToolStripMenuItem.Text = "Run To Cursor";
+            this.runToCursorToolStripMenuItem.Click += new System.EventHandler(this.runToCursorToolStripMenuItem_Click);
             // 
             // SourceFileForm
             // 
@@ -82,5 +91,6 @@ namespace xdc.Forms
         private ICSharpCode.TextEditor.TextEditorControl textEditor;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem inspectToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem runToCursorToolStripMenuItem;
     }
 }

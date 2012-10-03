@@ -232,6 +232,14 @@ namespace xdc.XDebug
             }
         }
 
+        public void RunTo(string filename, int line)
+        {
+            Breakpoint b = new Breakpoint(filename,null,line);
+            AddBreakpoint(b);
+            Run();
+            RemoveBreakpoint(b);
+        }
+
         /// <summary>
         /// Stop the active connection, if available. Terminate the listening socket.
         /// </summary>

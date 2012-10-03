@@ -302,6 +302,7 @@ namespace xdc.Forms
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
         {
             inspectToolStripMenuItem.Enabled = (_xdebugClient.State == XdebugClientState.Break);
+            runToCursorToolStripMenuItem.Enabled = (_xdebugClient.State == XdebugClientState.Break);
         }
 
         public void LoadSourceAsFile(string sourceCode)
@@ -314,6 +315,14 @@ namespace xdc.Forms
 
             this.textEditor.EndUpdate();
             
+        }
+
+        private void runToCursorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (_xdebugClient.State == XdebugClientState.Break)
+            {
+                _xdebugClient.RunTo(_filename, textEditor.ActiveTextAreaControl.Caret.Line);
+            }
         }
     }
 }
