@@ -1,0 +1,61 @@
+XDebugClient
+============
+
+This is a fork of the [original][] XDebugClient that did not get, at the time
+of writing, any updates for many years. The gole of this project is to update
+the code to workl with latest DBGp specifications (and debug engine implementation)
+and also add usability features.
+
+[original]: http://code.google.com/p/xdebugclient/
+
+Motivation
+----------
+
+In 2007 I released the first version of [DBGP Plugin][dbgpplugin] for [Notepad++][npp].
+The project is still (barely) maintained, but it always bugged me that NPPs window
+dock manager was so limited. With a debugger, you need a lot of docked windows. When
+XDC was first released, I had a look at it, but at that time it was still lacking
+a lot of features and I was focusing more more on my client. Years later I needed to
+setup a PHP debug client for a colleague and said that I'll XDC another look.
+I realized that the implementation was still lacking quite some features and as I
+also gained some expirience developing and maintaining the Flash Debugger plugin of
+[FlashDevelop][fd], I got the code and decided to add some of the basic features
+that I'd expect a client to have.
+I believe that the client still has huge potential as it is small and very simple
+to set up, and I'm posting the changes online so somebody might benifit from them.
+
+[dbgpplugin]: http://sourceforge.net/projects/npp-plugins/files/DBGP%20Plugin/
+[npp]: http://notepad-plus-plus.org/
+[fd]: http://www.flashdevelop.org/
+
+New features/Improvements
+=========================
+
+* Global and Local context
+
+  Look at local and global variables while stepping through code.
+
+
+
+TODO
+----
+
+* Proxy Register
+* Improve how Properties tree updates (Replace Model on new Poperties)
+* Center active line when breakpoint hits
+* Run to Cursor
+* Log/Output window has to support some colors
+* On exception show some info about it, in log/output window
+* Sort properties
+* View propertie value form close button does not work
+* Go to stack depth (dblclick in stack window)
+* Settings change shoukld take effect rigth away (send new features to server if connected)
+* Raw/Dbg window to log client-server communication and enter commands directly into stream
+* Catch dsiconnect. Clean stackk, context window
+* Store configuration into xml
+* Multiple sessions, sessions window, refactor client class (move to separate thread or make it async)
+* Improve properties details (there was some strange casting of "false" to "0")
+* "this" has sometimes duplicated data
+* Source file reload
+* stdout window?
+* Save docked window positions
