@@ -41,12 +41,12 @@ namespace xdc
             this.stepOverToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stepInToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stepOutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -70,27 +70,27 @@ namespace xdc
             this.closeToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "&File";
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(111, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.openToolStripMenuItem.Text = "&Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // closeToolStripMenuItem
             // 
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(111, 22);
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.closeToolStripMenuItem.Text = "&Close";
             this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(111, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -105,33 +105,33 @@ namespace xdc
             this.stepInToolStripMenuItem,
             this.stepOutToolStripMenuItem});
             this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
-            this.debugToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
+            this.debugToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
             this.debugToolStripMenuItem.Text = "Debug";
             // 
             // startListeningToolStripMenuItem
             // 
             this.startListeningToolStripMenuItem.Name = "startListeningToolStripMenuItem";
-            this.startListeningToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.startListeningToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.startListeningToolStripMenuItem.Text = "Start listening";
             this.startListeningToolStripMenuItem.Click += new System.EventHandler(this.startListeningToolStripMenuItem_Click);
             // 
             // stopDebuggingToolStripMenuItem
             // 
             this.stopDebuggingToolStripMenuItem.Name = "stopDebuggingToolStripMenuItem";
-            this.stopDebuggingToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.stopDebuggingToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.stopDebuggingToolStripMenuItem.Text = "Stop debugging";
             this.stopDebuggingToolStripMenuItem.Click += new System.EventHandler(this.stopDebuggingToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(157, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(156, 6);
             // 
             // runToolStripMenuItem
             // 
             this.runToolStripMenuItem.Name = "runToolStripMenuItem";
             this.runToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.runToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.runToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.runToolStripMenuItem.Text = "Run";
             this.runToolStripMenuItem.Click += new System.EventHandler(this.runToolStripMenuItem_Click);
             // 
@@ -139,7 +139,7 @@ namespace xdc
             // 
             this.stepOverToolStripMenuItem.Name = "stepOverToolStripMenuItem";
             this.stepOverToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F10;
-            this.stepOverToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.stepOverToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.stepOverToolStripMenuItem.Text = "Step over";
             this.stepOverToolStripMenuItem.Click += new System.EventHandler(this.stepOverToolStripMenuItem_Click);
             // 
@@ -147,7 +147,7 @@ namespace xdc
             // 
             this.stepInToolStripMenuItem.Name = "stepInToolStripMenuItem";
             this.stepInToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F11;
-            this.stepInToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.stepInToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.stepInToolStripMenuItem.Text = "Step in";
             this.stepInToolStripMenuItem.Click += new System.EventHandler(this.stepInToolStripMenuItem_Click);
             // 
@@ -155,22 +155,37 @@ namespace xdc
             // 
             this.stepOutToolStripMenuItem.Name = "stepOutToolStripMenuItem";
             this.stepOutToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F12;
-            this.stepOutToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.stepOutToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.stepOutToolStripMenuItem.Text = "Step out";
             this.stepOutToolStripMenuItem.Click += new System.EventHandler(this.stepOutToolStripMenuItem_Click);
+            // 
+            // toolsToolStripMenuItem
+            // 
+            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.optionsToolStripMenuItem});
+            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.toolsToolStripMenuItem.Text = "Tools";
+            // 
+            // optionsToolStripMenuItem
+            // 
+            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
+            this.optionsToolStripMenuItem.Text = "Options...";
+            this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.aboutToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "&Help";
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
@@ -190,21 +205,6 @@ namespace xdc
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // toolsToolStripMenuItem
-            // 
-            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.optionsToolStripMenuItem});
-            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.toolsToolStripMenuItem.Text = "Tools";
-            // 
-            // optionsToolStripMenuItem
-            // 
-            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.optionsToolStripMenuItem.Text = "Options...";
-            this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -217,6 +217,7 @@ namespace xdc
             this.Name = "MainForm";
             this.Text = "XDC: XDebugClient";
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);

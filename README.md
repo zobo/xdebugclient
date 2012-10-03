@@ -58,4 +58,3 @@ TODO
 * "this" has sometimes duplicated data
 * Source file reload
 * stdout window?
-* Save docked window positions

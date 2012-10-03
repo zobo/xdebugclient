@@ -531,10 +531,38 @@ namespace xdc
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            _callstackFrm.Show(this.dockPanel, DockState.DockBottom);
-            _statusFrm.Show(_callstackFrm.Pane, _callstackFrm);
-            _localContextFrm.Show(this.dockPanel, DockState.DockBottom);
-            _globalContextFrm.Show(this.dockPanel, DockState.DockBottom);
+            if (File.Exists("dock.xml"))
+            {
+                this.dockPanel.LoadFromXml("dock.xml", new DeserializeDockContent(DeserializeDockContent));
+            }
+            else
+            {
+                _callstackFrm.Show(this.dockPanel, DockState.DockBottom);
+                _statusFrm.Show(_callstackFrm.Pane, _callstackFrm);
+                _localContextFrm.Show(this.dockPanel, DockState.DockBottom);
+                _globalContextFrm.Show(this.dockPanel, DockState.DockBottom);
+            }
+        }
+
+        private IDockContent DeserializeDockContent(string persistString)
+        {
+            switch (persistString)
+            {
+                case "xdc.Forms.CallstackForm":
+                    return _callstackFrm;
+                case "xdc.Forms.StatusForm":
+                    return _statusFrm;
+                case "xdc.Forms.ContextFormLocals":
+                    return _localContextFrm;
+                case "xdc.Forms.ContextFormGlobals":
+                    return _globalContextFrm;
+            }
+            return null;
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            this.dockPanel.SaveAsXml("dock.xml");
         }
        
         private void runToolStripMenuItem_Click(object sender, EventArgs e)

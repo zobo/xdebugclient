@@ -20,6 +20,11 @@ namespace xdc.Forms
             properyControl1.Client = client;
         }
 
+        protected override string GetPersistString()
+        {
+            return base.GetPersistString() + this.Text;
+        }
+
         public void LoadPropertyList(List<Property> list)
         {
             this.properyControl1.LoadPropertyList(list);
