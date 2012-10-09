@@ -50,6 +50,8 @@ namespace xdc.XDebug
         private Socket    _listener;
         private Socket    _client;
 
+        public int StackDepth = 0;
+
         private XdebugClientState _State = XdebugClientState.Uninitialized;        
         public XdebugClientState State { get { return _State; } }
 
@@ -156,6 +158,8 @@ namespace xdc.XDebug
             string status = resp.XmlMessage.DocumentElement.Attributes["status"].Value;
             string reason = resp.XmlMessage.DocumentElement.Attributes["reason"].Value;
 
+            this.StackDepth = 0;
+
             XDebugEventArgs e;
 
             if (reason == "exception")
@@ -200,11 +204,7 @@ namespace xdc.XDebug
 
                         e = new XDebugEventArgs();
 
-                        e.CurrentLocation = new Location();
-
-                        /* Linenumbers have to be zero based. Xdebug uses 1-based. */
-                        e.CurrentLocation.filename = CallStack[0].fileName;
-                        e.CurrentLocation.line = CallStack[0].lineNumber - 1;
+                        e.CurrentLocation = CallStack[0].Location;
 
                         e.EventType = XDebugEventType.BreakpointHit;
 
@@ -321,6 +321,10 @@ namespace xdc.XDebug
                     se.lineNumber = System.Convert.ToInt32(n.Attributes["lineno"].Value);
                     se.level = System.Convert.ToInt32(n.Attributes["level"].Value);
                     se.location = n.Attributes["where"].Value;
+                    // TODO redundant? just remove the old one?
+                    /* Linenumbers have to be zero based. Xdebug uses 1-based. */
+                    se.Location.filename = se.fileName;
+                    se.Location.line = se.lineNumber - 1;
                     
                     CallStack.Add(se);
                 }
@@ -336,7 +340,7 @@ namespace xdc.XDebug
         /// <param name="name">Context name (0,1,2)</param>
         /// <param name="depth">Stack depth</param>
         /// <returns></returns>
-        public List<Property> getContext(string name, int depth)
+        public List<Property> GetContext(string name)
         {
             XDebug.Command c;
             XDebug.Response resp;
@@ -345,7 +349,7 @@ namespace xdc.XDebug
 
             c = new Command(
                 "context_get",
-                String.Format("-d {0} -c {1}", depth, name)
+                String.Format("-d {0} -c {1}", StackDepth, name)
                 );
 
             resp = this.SendCommand(c);
@@ -355,11 +359,12 @@ namespace xdc.XDebug
                 return null;
             }
 
+            ret = new List<Property>();
+
             propertyNode = resp.XmlMessage.DocumentElement.FirstChild;
 
-            if (propertyNode.Name == "property")
+            if (propertyNode != null && propertyNode.Name == "property")
             {
-                ret = new List<Property>();
                 while (propertyNode != null)
                 {
                     ret.Add(Property.Parse(propertyNode));
@@ -373,7 +378,7 @@ namespace xdc.XDebug
         /// Get the value of property. If the result is paged, xdebug returns at most
         /// 32 entries by default, all pages are fetched. Returns a tree of Property instances.      
         /// </summary>        
-        public Property GetPropertyValue(string name, int depth)
+        public Property GetPropertyValue(string name)
         {            
             XDebug.Command c;
             XDebug.Response resp;
@@ -382,7 +387,7 @@ namespace xdc.XDebug
 
             c = new Command(
                 "property_get",
-                String.Format("-d {0} -n {1}", depth, name)
+                String.Format("-d {0} -n {1}", StackDepth, name)
             );
 
             resp = this.SendCommand(c);
@@ -416,7 +421,7 @@ namespace xdc.XDebug
                     {                     
                         c = new Command(
                             "property_get",
-                            String.Format("-d {0} -n {1} -p {2}", depth, name, currentPage)
+                            String.Format("-d {0} -n {1} -p {2}", StackDepth, name, currentPage)
                         );
 
                         resp = this.SendCommand(c);

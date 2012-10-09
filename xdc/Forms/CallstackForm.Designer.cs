@@ -38,6 +38,7 @@ namespace xdc.Forms
             this.treeView1.Name = "treeView1";
             this.treeView1.Size = new System.Drawing.Size(292, 266);
             this.treeView1.TabIndex = 0;
+            this.treeView1.DoubleClick += new System.EventHandler(this.treeView1_DoubleClick);
             // 
             // CallstackForm
             // 

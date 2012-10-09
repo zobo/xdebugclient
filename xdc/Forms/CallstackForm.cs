@@ -37,6 +37,8 @@ namespace xdc.Forms
 {
     public partial class CallstackForm : DockContent
     {
+        public event EventHandler<StackEventArgs> StackSelected;
+
         public CallstackForm()
         {
             InitializeComponent();  
@@ -49,9 +51,41 @@ namespace xdc.Forms
 
             foreach (StackEntry entry in stack)
             {                
-                treeView1.Nodes.Add(entry.location + "() at " + entry.fileName + ":" + entry.lineNumber);
+                TreeNode tn = new TreeNode(entry.location + "() at " + entry.fileName + ":" + entry.lineNumber);
+                tn.Tag = entry;
+                treeView1.Nodes.Add(tn);
             }
         }
 
+        private void treeView1_DoubleClick(object sender, EventArgs e)
+        {
+            if (treeView1.SelectedNode != null)
+            {
+                StackEntry se = (StackEntry)treeView1.SelectedNode.Tag;
+                if (se.Location.line >= 0)
+                {
+                    DoStackSelected(se);
+                }
+            }
+        }
+
+        protected void DoStackSelected(StackEntry stackEntry)
+        {
+            if (this.StackSelected != null)
+            {
+                this.StackSelected(this, new StackEventArgs(stackEntry));
+            }
+        }
+
+    }
+
+    public class StackEventArgs : EventArgs
+    {
+        public StackEntry StackEntry;
+
+        public StackEventArgs(StackEntry stackEntry)
+        {
+            this.StackEntry = stackEntry;
+        }
     }
 }

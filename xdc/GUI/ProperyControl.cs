@@ -82,7 +82,7 @@ namespace xdc.GUI
 			if (node != null && !node.Property.isComplete)
 			{
 				this.treeViewAdv1.BeginUpdate();
-				Property p = _client.GetPropertyValue(node.Property.FullName, 0);
+				Property p = _client.GetPropertyValue(node.Property.FullName);
 
 				/* We don't want 'p' itself. It will be a copy of the node that
 				 * was marked as inComplete. */

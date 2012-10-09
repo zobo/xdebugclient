@@ -73,6 +73,8 @@ namespace xdc
             _breakpointMgr = new BreakpointManager();
             _fileMgr = new FileManager();
            
+            // Handlers
+            _callstackFrm.StackSelected += new EventHandler<xdc.Forms.StackEventArgs>(_callstackFrm_StackSelected);
 
             _CurrentLocation = new Location();
             _CurrentLocation.line = -1;
@@ -409,9 +411,9 @@ namespace xdc
             List<StackEntry> callstack = _client.GetCallStack(-1);
             _callstackFrm.setCallstack(callstack);
             // local and global context
-            List<Property> ctx = _client.getContext("0", 0);
+            List<Property> ctx = _client.GetContext("0");
             _localContextFrm.LoadPropertyList(ctx);
-            ctx = _client.getContext("1", 0);
+            ctx = _client.GetContext("1");
             _globalContextFrm.LoadPropertyList(ctx);
         }
 
@@ -502,6 +504,27 @@ namespace xdc
                 WriteDebugLine(String.Format("Breakpoint removed: {0}:{1}", b.filename, b.LineNumber));
                 _breakpointMgr.Record(b, BreakpointState.Removed);
             }
+        }
+
+        #endregion
+
+        #region Callstack events
+
+        void _callstackFrm_StackSelected(object sender, xdc.Forms.StackEventArgs e)
+        {
+            Location loc = new Location();
+            loc.filename = e.StackEntry.fileName;
+            loc.line = e.StackEntry.lineNumber - 1;
+
+            _client.StackDepth = e.StackEntry.level;
+
+            this.PrepareFileForAccess(loc.filename);
+            this.SetActiveFileAndLine(loc);
+            // re get context
+            List<Property> ctx = _client.GetContext("0");
+            _localContextFrm.LoadPropertyList(ctx);
+            ctx = _client.GetContext("1");
+            _globalContextFrm.LoadPropertyList(ctx);
         }
 
         #endregion

@@ -30,6 +30,7 @@ namespace xdc.XDebug
         public string fileName;
         public int lineNumber;
         public int level;
-        public string location;       
+        public string location;
+        public Location Location;
     }
 }
