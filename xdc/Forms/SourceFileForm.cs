@@ -182,7 +182,9 @@ namespace xdc.Forms
 
             this.setLineColor(Line, Color.FromName("Yellow"));
 
-            this.textEditor.ActiveTextAreaControl.ScrollTo(Line + 10);
+            this.textEditor.ActiveTextAreaControl.ScrollTo(Line - this.textEditor.ActiveTextAreaControl.TextArea.TextView.VisibleLineCount / 2);
+            this.textEditor.ActiveTextAreaControl.ScrollTo(Line);
+            this.textEditor.ActiveTextAreaControl.ScrollTo(Line + this.textEditor.ActiveTextAreaControl.TextArea.TextView.VisibleLineCount / 2);
         }
 
 
