@@ -58,3 +58,5 @@ TODO
 * "this" has sometimes duplicated data
 * Source file reload
 * stdout window?
+* Breakpints window
+* Ctrl-F search, F3 next
