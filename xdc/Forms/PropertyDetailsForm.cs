@@ -23,5 +23,10 @@ namespace xdc.Forms
         {
             textBox1.Text = _content_value;
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

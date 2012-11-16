@@ -35,23 +35,23 @@ New features/Improvements
 
   Look at local and global variables while stepping through code.
 
+* Move up and down the stack
 
+  Whenever execution is paused, inspection of different stack levels is possible
+  by doubble clicking on call stack entries.
 
 TODO
 ----
 
 * Proxy Register
 * Improve how Properties tree updates (Replace Model on new Properties)
-* Center active line when breakpoint hits
-* Run to Cursor
 * Log/Output window has to support some colors
 * On exception show some info about it, in log/output window
 * Sort properties
 * View property value form close button does not work
-* Go to stack depth (dblclick in stack window)
 * Settings change should take effect right away (send new features to server if connected)
 * Raw/Dbg window to log client-server communication and enter commands directly into stream
-* Catch disconnects. Clean stack, context window
+* Catch disconnects. Clean stack, context window - use BeginRecieve and EventWaitHandle (WaitOne, Set) to wait fpr resp
 * Store configuration into xml
 * Multiple sessions, session window, refactor client class (move to separate thread or make it async)
 * Improve properties details (there was some strange casting of "false" to "0")
@@ -60,3 +60,5 @@ TODO
 * stdout window?
 * Breakpints window
 * Ctrl-F search, F3 next
+* Client refactor: have link to breakpoint manager, move "SendContinuationCommand" to client
+* Start listening on startup

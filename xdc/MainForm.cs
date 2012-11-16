@@ -152,6 +152,8 @@ namespace xdc
 
             this.ToggleMenuItems(false);
 
+            // TODO cleanup forms
+
             _statusFrm.WriteStatusLine("(!) Debugging session terminated.");
         }
 
@@ -175,7 +177,10 @@ namespace xdc
             if (_CurrentLocation.line != -1)
             {
                 xdc.Forms.SourceFileForm previousFile = _fileMgr.getFormByRemoteFilename(_CurrentLocation.filename);
-                previousFile.RemoveActiveMark();
+                if (previousFile != null)
+                {
+                    previousFile.RemoveActiveMark();
+                }
             }
 
             _CurrentLocation.line = location.line;

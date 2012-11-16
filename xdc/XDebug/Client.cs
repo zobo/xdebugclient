@@ -472,8 +472,6 @@ namespace xdc.XDebug
             _listener.Bind(new IPEndPoint(IPAddress.Any, _port));
             _listener.Listen(1);
 
-            AsyncCallback c = new AsyncCallback(OnConnectRequest);
-            
             _listener.BeginAccept(new AsyncCallback(OnConnectRequest), _listener);
         }
 
@@ -526,7 +524,12 @@ namespace xdc.XDebug
             /* Determine the length of the message byte-by-byte */
             do
             {
-                _client.Receive(c, 1, SocketFlags.None);
+                int bc = _client.Receive(c, 1, SocketFlags.None);
+                if (bc == 0)
+                {
+                    // peer close, abort
+                    throw new Exception("Socket read error");
+                }
 
                 if (c[0] != (byte)0x00)
                 {
@@ -556,12 +559,13 @@ namespace xdc.XDebug
                 if (bytesRead == 0 || bytesRead < 0)
                     throw new Exception("Socket read error");
 
+                Buffer.BlockCopy(xmlMessageBytes, 0, messageBytes, totalBytesRead, bytesRead);
                 totalBytesRead += bytesRead;
 
-                for (int i = 0; i < bytesRead; i++)
-                {
-                    messageBytes[currentByte++] = xmlMessageBytes[i];
-                }
+                //for (int i = 0; i < bytesRead; i++)
+                //{
+                //    messageBytes[currentByte++] = xmlMessageBytes[i];
+                //}
 
             } while (totalBytesRead < length);
 
