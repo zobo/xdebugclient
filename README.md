@@ -40,6 +40,10 @@ New features/Improvements
   Whenever execution is paused, inspection of different stack levels is possible
   by doubble clicking on call stack entries.
 
+* Sotring settings
+
+  Docking positions and options are saved to xml files.
+
 TODO
 ----
 
@@ -52,7 +56,6 @@ TODO
 * Settings change should take effect right away (send new features to server if connected)
 * Raw/Dbg window to log client-server communication and enter commands directly into stream
 * Catch disconnects. Clean stack, context window - use BeginRecieve and EventWaitHandle (WaitOne, Set) to wait fpr resp
-* Store configuration into xml
 * Multiple sessions, session window, refactor client class (move to separate thread or make it async)
 * Improve properties details (there was some strange casting of "false" to "0")
 * "this" has sometimes duplicated data

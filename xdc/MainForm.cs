@@ -591,6 +591,7 @@ namespace xdc
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             this.dockPanel.SaveAsXml("dock.xml");
+            xdc.Properties.Settings.Default.Save();
         }
        
         private void runToolStripMenuItem_Click(object sender, EventArgs e)
