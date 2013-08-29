@@ -153,6 +153,9 @@ namespace xdc
             this.ToggleMenuItems(false);
 
             // TODO cleanup forms
+            List<Property> emp = new List<Property>();
+            _globalContextFrm.LoadPropertyList(emp);
+            _localContextFrm.LoadPropertyList(emp);
 
             _statusFrm.WriteStatusLine("(!) Debugging session terminated.");
         }
