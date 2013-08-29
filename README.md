@@ -16,7 +16,7 @@ The project is still (barely) maintained, but it always bugged me that NPPs wind
 dock manager was so limited. With a debugger, you need a lot of docked windows. When
 XDC was first released, I had a look at it, but at that time it was still lacking
 a lot of features and I was focusing more on my client. Years later I needed to
-setup a PHP debug client for a colleague and said that I'll XDC another look.
+setup a PHP debug client for a colleague and said that I'll give XDC another look.
 I realized that the implementation was still lacking quite some features and as I
 also gained some experience developing and maintaining the Flash Debugger plugin of
 [FlashDevelop][fd], I got the code and decided to add some of the basic features
@@ -65,3 +65,4 @@ TODO
 * Ctrl-F search, F3 next
 * Client refactor: have link to breakpoint manager, move "SendContinuationCommand" to client
 * Start listening on startup
+* Taskbar
