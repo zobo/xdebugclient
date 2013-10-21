@@ -35,6 +35,7 @@ namespace xdc.XDebug
         public PropertyType Type;
         public string       FullName;
         public bool         isComplete;
+		public string       Context;
 
         public List<Property> ChildProperties;
 
@@ -50,12 +51,14 @@ namespace xdc.XDebug
             this.Type = type;
             this.isComplete = complete;
             this.FullName = fullname;
+			this.Context = "0";
             ChildProperties = new List<Property>();
         }
 
-        static public Property Parse(XmlNode firstProperty)
+        static public Property Parse(XmlNode firstProperty, string context)
         {                       
             Property rootProperty = new Property();
+			rootProperty.Context = context;
 
             rootProperty.Name = firstProperty.Attributes["name"].Value;
             rootProperty.FullName = firstProperty.Attributes["fullname"].Value;
@@ -113,7 +116,7 @@ namespace xdc.XDebug
                     foreach (XmlNode node in firstProperty.ChildNodes)
                     {
                         if (node.Attributes["name"].Value == "CLASSNAME") continue; // this is to handle http://bugs.xdebug.org/bug_view_page.php?bug_id=00000518
-                        rootProperty.ChildProperties.Add(Property.Parse(node));                        
+                        rootProperty.ChildProperties.Add(Property.Parse(node, context));                        
                     }
                 }
             }

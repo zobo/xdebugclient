@@ -82,18 +82,25 @@ namespace xdc.GUI
 			if (node != null && !node.Property.isComplete)
 			{
 				this.treeViewAdv1.BeginUpdate();
-				Property p = _client.GetPropertyValue(node.Property.FullName);
+				Property p = _client.GetPropertyValue(node.Property.FullName, node.Property.Context);
 
-				/* We don't want 'p' itself. It will be a copy of the node that
-				 * was marked as inComplete. */
-				foreach (Property child in p.ChildProperties)
+				if (p == null)
 				{
-					DebugNode newNode = this.BuildDebugNode(child, node);
-
-					node.Nodes.Add(newNode);
+					MessageBox.Show("Cannot fetch property " + node.Property.FullName);
 				}
+				else
+				{
+					/* We don't want 'p' itself. It will be a copy of the node that
+					 * was marked as inComplete. */
+					foreach (Property child in p.ChildProperties)
+					{
+						DebugNode newNode = this.BuildDebugNode(child, node);
 
-				node.Property.isComplete = true;
+						node.Nodes.Add(newNode);
+					}
+
+					node.Property.isComplete = true;
+				}
 				this.treeViewAdv1.EndUpdate();
 			}
 		}

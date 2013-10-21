@@ -367,7 +367,7 @@ namespace xdc.XDebug
             {
                 while (propertyNode != null)
                 {
-                    ret.Add(Property.Parse(propertyNode));
+                    ret.Add(Property.Parse(propertyNode, name));
                     propertyNode = propertyNode.NextSibling;
                 }
             }
@@ -378,7 +378,7 @@ namespace xdc.XDebug
         /// Get the value of property. If the result is paged, xdebug returns at most
         /// 32 entries by default, all pages are fetched. Returns a tree of Property instances.      
         /// </summary>        
-        public Property GetPropertyValue(string name)
+        public Property GetPropertyValue(string name, string context)
         {            
             XDebug.Command c;
             XDebug.Response resp;
@@ -387,8 +387,9 @@ namespace xdc.XDebug
 
             c = new Command(
                 "property_get",
-                String.Format("-d {0} -n {1}", StackDepth, name)
+                String.Format("-d {0} -n {1} -c {2}", StackDepth, name, context)
             );
+			// todo context!
 
             resp = this.SendCommand(c);
 
@@ -401,7 +402,7 @@ namespace xdc.XDebug
 
             if (propertyNode.Name == "property")
             {                   
-                theProperty = Property.Parse(propertyNode);
+                theProperty = Property.Parse(propertyNode, context);
 
                 /* Try to fetch all pages for a property if the 'pages'
                  * attribute is set in the result. */                 
@@ -421,7 +422,7 @@ namespace xdc.XDebug
                     {                     
                         c = new Command(
                             "property_get",
-                            String.Format("-d {0} -n {1} -p {2}", StackDepth, name, currentPage)
+                            String.Format("-d {0} -n {1} -p {2} -c {3}", StackDepth, name, currentPage, context)
                         );
 
                         resp = this.SendCommand(c);
@@ -432,7 +433,7 @@ namespace xdc.XDebug
 
                             if (propertyNode.Name == "property")
                             {
-                                Property tmpProperty = Property.Parse(propertyNode);
+                                Property tmpProperty = Property.Parse(propertyNode, context);
 
                                 foreach (Property tmpChildProperty in tmpProperty.ChildProperties)
                                 {

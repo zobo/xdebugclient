@@ -250,7 +250,7 @@ namespace xdc.Forms
 
                 if (s != "")
                 {
-                    Property p = _xdebugClient.GetPropertyValue(s);
+                    Property p = _xdebugClient.GetPropertyValue(s, "0");
 
                     if (p != null)
                         e.ShowToolTip(p.Value);
@@ -285,7 +285,7 @@ namespace xdc.Forms
                 else
                     s = ICSharpCode.TextEditor.Document.TextUtilities.GetWordAt(textEditor.ActiveTextAreaControl.Document, textEditor.ActiveTextAreaControl.Caret.Offset);
 
-                Property p = _xdebugClient.GetPropertyValue(s);
+                Property p = _xdebugClient.GetPropertyValue(s, "0"); // TODO, what about global context
 
                 if (p == null)
                 {
