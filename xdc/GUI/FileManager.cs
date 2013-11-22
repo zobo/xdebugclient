@@ -21,19 +21,20 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
-
 using xdc.XDebug;
 using xdc.Forms;
 using System.Windows.Forms;
 
 namespace xdc.GUI
 {
-    struct OpenFileStruct
+    class OpenFileStruct
     {
         public string localFilename;
         public string remoteFilename;
         public SourceFileForm form;
+        public DateTime lastModified;
     }
 
     class DirectoryRewrite
@@ -47,8 +48,8 @@ namespace xdc.GUI
     /// </summary>
     class FileManager
     {
-        private Dictionary<string, OpenFileStruct> _openFiles;        
-        
+        private Dictionary<string, OpenFileStruct> _openFiles;
+        private System.Windows.Forms.Timer _autoRefreshTimer;
     
         public bool HasOpenFiles
         {
@@ -94,8 +95,11 @@ namespace xdc.GUI
             file.localFilename = localFilename;
             file.remoteFilename = actualFilename;
             file.form = form;
+            file.lastModified = new FileInfo(localFilename).LastWriteTime;
 
-            _openFiles.Add(file.localFilename, file);           
+            _openFiles.Add(file.localFilename, file);
+            
+            StartAutoRefresh();
         }
 
         public void Remove(string filename)
@@ -141,7 +145,35 @@ namespace xdc.GUI
             return null;
         }
 
+        public void StartAutoRefresh()
+        {
+            if (_autoRefreshTimer == null)
+            {
+                _autoRefreshTimer = new System.Windows.Forms.Timer();
+                _autoRefreshTimer.Tick += new EventHandler(RefreshFiles);
+                _autoRefreshTimer.Interval = 1000;
+            }
 
+            _autoRefreshTimer.Start();
+        }
+
+        public void StopAutoRefresh()
+        {
+            _autoRefreshTimer.Stop();
+        }
+
+        private void RefreshFiles(object sender, EventArgs args)
+        {
+            foreach (var file in _openFiles.Values)
+            {
+                var lastWriteTime = new FileInfo(file.localFilename).LastWriteTime;
+                if (file.lastModified != lastWriteTime)
+                {
+                    file.form.LoadFile(file.localFilename);
+                    file.lastModified = lastWriteTime;
+                }
+            }
+        }
     }
 
 }
