@@ -103,10 +103,10 @@ namespace xdc
         {
             if (started)
             {
-                if (_fileLoader != null && _fileLoader.AllowsOpenFileDialog)
+                /*if (_fileLoader != null && _fileLoader.AllowsOpenFileDialog)
                 {
                     openToolStripMenuItem.Enabled = true;
-                }
+                }*/
 
                 runToolStripMenuItem.Enabled = true;
                 stepInToolStripMenuItem.Enabled = true;
@@ -125,8 +125,8 @@ namespace xdc
 
                 startListeningToolStripMenuItem.Enabled = true;
                 stopDebuggingToolStripMenuItem.Enabled = false;
-                openToolStripMenuItem.Enabled = false;
-                closeToolStripMenuItem.Enabled = false;
+                //openToolStripMenuItem.Enabled = false;
+                //closeToolStripMenuItem.Enabled = false;
             }
 
         }
